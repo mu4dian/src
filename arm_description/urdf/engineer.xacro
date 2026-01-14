@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
+
+  <!-- Include arm xacro file -->
+  <xacro:include filename="$(find arm_description)/urdf/arm.xacro" />
+  
+  <!-- Include gripper xacro file -->
+  <xacro:include filename="$(find arm_description)/urdf/gripper.xacro" />
+
+  <!-- Properties for joint6 -->
+  <xacro:property name="joint_effort_limit" value="100" />
+  <xacro:property name="joint_velocity_limit" value="100" />
+  <xacro:property name="joint_lower_limit" value="-3.14" />
+  <xacro:property name="joint_upper_limit" value="3.14" />
+
+  <!-- Link 6 (gripper rotation link) -->
+  <link name="link6">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.02" />
+      <inertia
+        ixx="1e-6"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="1e-6"
+        iyz="0.0"
+        izz="1e-6" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.015" length="0.02" />
+      </geometry>
+      <material name="">
+        <color rgba="0.3 0.3 0.3 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.015" length="0.02" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 6 (gripper rotation joint) -->
+  <joint name="joint6" type="revolute">
+    <origin xyz="0.09 0 0.02" rpy="0 0 0" />
+    <parent link="link5" />
+    <child link="link6" />
+    <axis xyz="-1 0 0" />
+    <limit
+      lower="${joint_lower_limit}"
+      upper="${joint_upper_limit}"
+      effort="${joint_effort_limit}"
+      velocity="${joint_velocity_limit}" />
+  </joint>
+
+  <!-- Instantiate the gripper and attach it to link6 -->
+  <xacro:gripper prefix="" parent="link6">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:gripper>
+
+</robot>

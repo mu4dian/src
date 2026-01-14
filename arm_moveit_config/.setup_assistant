@@ -1,13 +1,13 @@
 moveit_setup_assistant_config:
   urdf:
     package: arm_description
-    relative_path: urdf/arm.urdf
+    relative_path: urdf/engineer.xacro
   srdf:
-    relative_path: config/arm.srdf
+    relative_path: config/engineer.srdf
   package_settings:
     author_name: mu4dian
     author_email: mu4dian@163.com
-    generated_timestamp: 1768308777
+    generated_timestamp: 1768366071
   control_xacro:
     command:
       - position
