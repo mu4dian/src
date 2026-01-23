@@ -1,6 +1,6 @@
 <launch>
     <let name="urdf_path"
-         value="$(find-pkg-share arm_moveit_config)/config/engineer.urdf.xacro"/>
+         value="$(find-pkg-share engineer_moveit_config)/config/engineer.urdf.xacro"/>
     <let name="rviz_config_path"
          value="$(find-pkg-share engineer_bringup)/config/engineer_moveit.rviz"/>
 
@@ -19,7 +19,7 @@
     <node pkg="controller_manager" exec="spawner" args="arm_controller" />
     <node pkg="controller_manager" exec="spawner" args="gripper_controller" />
 
-    <include file="$(find-pkg-share arm_moveit_config)/launch/move_group.launch.py" />
+    <include file="$(find-pkg-share engineer_moveit_config)/launch/move_group.launch.py" />
 
     <node pkg="rviz2" exec="rviz2" output="screen" 
           args="-d $(var rviz_config_path)" />

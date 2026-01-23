@@ -5,7 +5,13 @@
 
         <ros2_control name="${name}" type="system">
             <hardware>
-                <!-- By default, set up controllers for simulation. This won't work on real hardware -->
+                <!-- 使用真实硬件接口插件 -->
+                <!-- <plugin>arm_serial_hardware/ArmGripperSystem</plugin> -->
+                <!-- 串口配置参数 -->
+                <!-- <param name="port">/dev/ttyUSB0</param>
+                <param name="baudrate">115200</param>
+                <param name="timeout_ms">1000</param> -->
+                <!-- 使用模拟硬件接口插件 -->
                 <plugin>mock_components/GenericSystem</plugin>
             </hardware>
             <joint name="joint1">
