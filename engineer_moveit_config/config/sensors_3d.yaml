@@ -44,7 +44,7 @@ default_sensor:
 
   # 7) 自体过滤（关键：避免把机器人自己写进 OctoMap）
   # padding_offset：对机器人网格做“加厚”，单位 m。越大越保守，但更容易把自己当障碍
-  padding_offset: 0.03
+  padding_offset: 0.01
 
   # padding_scale：对机器人网格做整体缩放。一般 1.0~1.2；过大容易误杀
   padding_scale: 1.0
