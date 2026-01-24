@@ -1,11 +1,50 @@
+# 如果出现了occupancy_map_monitor::OccupancyMapUpdater does not exist 的错误，请确保在CMakeLists.txt中添加了对moveit_ros_perception的依赖
+# 并保证系统中安装了moveit_ros_perception包。
+# 安装的指令是：sudo apt-get install ros-<distro>-moveit-ros-perception
+
 sensors:
   - default_sensor
+
 default_sensor:
-  filtered_cloud_topic: filtered_cloud
-  max_range: 1.2
-  max_update_rate: 1.0
-  padding_offset: 0.03
-  padding_scale: 2.0
-  point_cloud_topic: /camera/depth_registered/points
-  point_subsample: 2
+  # 1) 插件类型：点云转 OctoMap
   sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+
+  # 2) 输入点云
+  point_cloud_topic: /camera/depth/points
+
+  # 3) 调试输出（自体过滤后的点云）
+  filtered_cloud_topic: /moveit/filtered_cloud
+
+  # 4) 性能与稳定性
+  # 订阅队列（真实相机 15~30Hz 时建议 >= 5）
+  queue_size: 5
+
+  # TF 缓存查找等待时间（秒）；真实系统 TF 有延迟时可适当加大
+  # 解决你曾经看到的 shape_mask Missing transform 类问题
+  shape_transform_cache_lookup_wait_time: 0.2
+
+  # 5) 有效距离与更新频率
+  # 仅保留 3m 内点；机械臂工作台一般 1.5~3.0 比较合适
+  max_range: 3.0
+
+  # 更新频率上限（Hz）。相机 30Hz，OctoMap 不必 30Hz，建议 5~15
+  max_update_rate: 10.0
+
+  # 6) 下采样与噪声控制
+  # 1=不降采样；2=每隔一个点取一个，明显减负
+  point_subsample: 1
+
+  # 可选：如果你的版本支持这些键，可以显著改善噪声/抖动
+  # （不支持也没关系，MoveIt 会忽略未知参数）
+  # 体素滤波尺寸（m），0.01~0.03 常用
+
+  # 最小/最大可接受点数（避免空帧/异常帧导致地图乱跳）
+  # min_points: 2000
+  # max_points: 200000
+
+  # 7) 自体过滤（关键：避免把机器人自己写进 OctoMap）
+  # padding_offset：对机器人网格做“加厚”，单位 m。越大越保守，但更容易把自己当障碍
+  padding_offset: 0.03
+
+  # padding_scale：对机器人网格做整体缩放。一般 1.0~1.2；过大容易误杀
+  padding_scale: 1.0
